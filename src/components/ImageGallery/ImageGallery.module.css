@@ -1,0 +1,35 @@
+.ImageGallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    margin-bottom: 40px;
+    padding-top: 100px;
+    justify-content: center;
+  }
+  
+  .ImageCard {
+    flex: 1 0 calc(33.333% - 20px);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #555;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .ImageCard:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    border-color: #ffffff;
+  }
+  
+  .ImageCard img {
+    width: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
