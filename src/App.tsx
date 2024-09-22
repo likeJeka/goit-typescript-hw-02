@@ -20,8 +20,6 @@ interface BaseImage {
   alt_description: string;
 }
 
-interface APIImage extends BaseImage {}
-
 interface CustomImage extends BaseImage {
   user: {
     name: string;
