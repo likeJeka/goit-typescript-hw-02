@@ -1,13 +1,13 @@
 import React from "react";
 import { Oval } from "react-loader-spinner";
-import css from "./Loader.module.css";
+import styles from "./Loader.module.css";
 
-const Loader: React.FC = () => {
+const LoadingSpinner: React.FC = () => {
   return (
-    <div className={css.loader}>
-      <Oval color="#fafafa" height={80} width={80} />
+    <div className={styles.loaderWrapper}>
+      <Oval color="#ffffff" height={70} width={70} />
     </div>
   );
 };
 
-export default Loader;
+export default LoadingSpinner;

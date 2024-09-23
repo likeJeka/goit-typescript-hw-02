@@ -1,16 +1,16 @@
 import React from "react";
-import css from "./LoadMoreBtn.module.css";
+import styles from "./LoadMoreBtn.module.css";
 
-interface LoadMoreBtnProps {
-  onClick: () => void;
+interface ILoadMoreButtonProps {
+  handleClick: () => void;
 }
 
-const LoadMoreBtn: React.FC<LoadMoreBtnProps> = ({ onClick }) => {
+const LoadMoreButton: React.FC<ILoadMoreButtonProps> = ({ handleClick }) => {
   return (
-    <button className={css.LoadMoreBtn} onClick={onClick}>
-      Load more
+    <button className={styles.loadMoreButton} onClick={handleClick}>
+      Показать больше
     </button>
   );
 };
 
-export default LoadMoreBtn;
+export default LoadMoreButton;

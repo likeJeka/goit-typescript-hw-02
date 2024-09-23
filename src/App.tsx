@@ -4,14 +4,14 @@ import { Toaster, toast } from "react-hot-toast";
 
 import SearchBar from "./components/SearchBar/SearchBar";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import LoadMoreBtn from "./components/LoadMoreBtn/LoadMorebtn";
+import LoadMoreButton from "./components/LoadMoreBtn/LoadMorebtn";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
 import ImageModal from "./components/ImageModal/ImageModal";
 
 const API_KEY = "O8xx4BoKhrynM_idIMcZNVlgm97d4XejwArnmPzdAZM";
 
-interface BaseImage {
+interface IImageBase {
   id: string;
   urls: {
     small: string;
@@ -20,7 +20,7 @@ interface BaseImage {
   alt_description: string;
 }
 
-interface CustomImage extends BaseImage {
+interface IImage extends IImageBase {
   user: {
     name: string;
   };
@@ -28,86 +28,79 @@ interface CustomImage extends BaseImage {
 }
 
 const App: React.FC = () => {
-  const [images, setImages] = useState<CustomImage[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState<CustomImage | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const [query, setQuery] = useState<string>("");
+  const [imageList, setImageList] = useState<IImage[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<IImage | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const galleryEndRef = useRef<HTMLDivElement | null>(null);
 
-  const handleSearch = async (searchQuery: string) => {
-    setLoading(true);
-    setError(null);
-    setQuery(searchQuery);
-    setPage(1);
+  const fetchImages = async (query: string, page: number) => {
+    setIsLoading(true);
+    setErrorMsg(null);
     try {
       const response = await axios.get(
         "https://api.unsplash.com/search/photos",
         {
-          params: { query: searchQuery, page: 1, per_page: 9 },
+          params: { query, page, per_page: 9 },
           headers: { Authorization: `Client-ID ${API_KEY}` },
         }
       );
-      setImages(response.data.results);
-    } catch (error) {
-      setError("Не удалось загрузить изображения");
+      return response.data.results;
+    } catch {
+      setErrorMsg("Не удалось загрузить изображения");
       toast.error("Не удалось загрузить изображения");
+      return [];
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
+  };
+
+  const handleSearch = async (query: string) => {
+    setSearchTerm(query);
+    setCurrentPage(1);
+    const images = await fetchImages(query, 1);
+    setImageList(images);
   };
 
   const loadMoreImages = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        "https://api.unsplash.com/search/photos",
-        {
-          params: { query, page: page + 1, per_page: 9 },
-          headers: { Authorization: `Client-ID ${API_KEY}` },
-        }
-      );
-      setImages((prevImages) => [...prevImages, ...response.data.results]);
-      setPage((prevPage) => prevPage + 1);
-      setTimeout(() => {
-        if (galleryEndRef.current) {
-          galleryEndRef.current.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-          });
-        }
-      }, 400);
-    } catch (error) {
-      setError("Не удалось загрузить больше изображений");
-      toast.error("Не удалось загрузить больше изображений");
-    } finally {
-      setLoading(false);
-    }
+    const newPage = currentPage + 1;
+    const newImages = await fetchImages(searchTerm, newPage);
+    setImageList((prevImages) => [...prevImages, ...newImages]);
+    setCurrentPage(newPage);
+    setTimeout(() => {
+      if (galleryEndRef.current) {
+        galleryEndRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    }, 400);
   };
 
-  const handleImageClick = (image: CustomImage) => {
-    setSelectedImage(image);
+  const handleImageClick = (image: IImage) => {
+    setActiveImage(image);
   };
 
-  const handleCloseModal = () => {
-    setSelectedImage(null);
+  const closeImageModal = () => {
+    setActiveImage(null);
   };
 
   return (
     <>
       <Toaster />
-      <SearchBar onSearch={handleSearch} />
-      {error && <ErrorMessage message={error} />}
-      {loading && <Loader />}
-      <ImageGallery images={images} onImageClick={handleImageClick} />
-      {images.length > 0 && !loading && !error && (
-        <LoadMoreBtn onClick={loadMoreImages} />
+      <SearchBar onSearch={handleSearch} /> {}
+      {errorMsg && <ErrorMessage message={errorMsg} />}
+      {isLoading && <Loader />}
+      <ImageGallery images={imageList} onImageClick={handleImageClick} />
+      {imageList.length > 0 && !isLoading && !errorMsg && (
+        <LoadMoreButton onClick={loadMoreImages} />
       )}
       <ImageModal
-        isOpen={!!selectedImage}
-        image={selectedImage}
-        onClose={handleCloseModal}
+        isOpen={!!activeImage}
+        image={activeImage}
+        onClose={closeImageModal}
       />
       <div ref={galleryEndRef} />
     </>

@@ -1,10 +1,10 @@
 import React from "react";
 
-interface ErrorMessageProps {
+type ErrorMessageProps = {
   message: string;
-}
+};
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+const ErrorMessage = ({ message }: ErrorMessageProps) => {
   return <p>{message}</p>;
 };
 

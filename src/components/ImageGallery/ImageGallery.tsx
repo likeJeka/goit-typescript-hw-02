@@ -2,42 +2,42 @@ import React from "react";
 import ImageCard from "./ImageCard/ImageCard";
 import css from "./ImageGallery.module.css";
 
-interface BaseImage {
+type BaseImage = {
   id: string;
   urls: {
     small: string;
     regular: string;
   };
   alt_description: string;
-}
+};
 
-interface CustomImage extends BaseImage {
+type CustomImage = BaseImage & {
   user: {
     name: string;
   };
   likes: number;
-}
+};
 
-interface ImageGalleryProps {
+type ImageGalleryProps = {
   images: CustomImage[];
   onImageClick: (image: CustomImage) => void;
-}
+};
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({
-  images,
-  onImageClick,
-}) => {
-  if (images.length === 0) return null;
+const ImageGallery = ({ images, onImageClick }: ImageGalleryProps) => {
+  if (!images.length) return null;
 
-  return (
-    <ul className={css.ImageGallery}>
-      {images.map((image) => (
-        <li className={css.ImageCard} key={image.id}>
-          <ImageCard image={image} onClick={() => onImageClick(image)} />
-        </li>
-      ))}
-    </ul>
-  );
+  const handleImageClick = (image: CustomImage) => {
+    onImageClick(image);
+  };
+
+  const renderImages = () =>
+    images.map((image) => (
+      <li className={css.ImageCard} key={image.id}>
+        <ImageCard image={image} onClick={() => handleImageClick(image)} />
+      </li>
+    ));
+
+  return <ul className={css.ImageGallery}>{renderImages()}</ul>;
 };
 
 export default ImageGallery;

@@ -6,7 +6,7 @@ import "./index.css";
 
 Modal.setAppElement("#root");
 
-const rootElement = document.getElementById("root") as HTMLElement;
+const rootElement = document.getElementById("root");
 
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(

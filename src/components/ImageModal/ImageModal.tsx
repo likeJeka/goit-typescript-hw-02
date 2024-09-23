@@ -34,7 +34,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, image, onClose }) => {
       <button className={css.closeButton} onClick={onClose}>
         Close
       </button>
-      {image && (
+      {image ? (
         <>
           <img
             className={css.modalImg}
@@ -47,6 +47,8 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, image, onClose }) => {
           <p>by {image.user.name}</p>
           <p>Likes: {image.likes}</p>
         </>
+      ) : (
+        <p>No image selected</p>
       )}
     </Modal>
   );
