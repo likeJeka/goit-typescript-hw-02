@@ -95,7 +95,7 @@ const App: React.FC = () => {
       {isLoading && <Loader />}
       <ImageGallery images={imageList} onImageClick={handleImageClick} />
       {imageList.length > 0 && !isLoading && !errorMsg && (
-        <LoadMoreButton onClick={loadMoreImages} />
+        <LoadMoreButton handleClick={loadMoreImages} />
       )}
       <ImageModal
         isOpen={!!activeImage}
