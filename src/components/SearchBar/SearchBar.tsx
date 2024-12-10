@@ -11,8 +11,8 @@ const SearchBar: React.FC<ISearchBarProps> = ({ onSearch }) => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!searchTerm.trim()) {
-      toast.error("Введите поисковый запрос!");
+    if (searchTerm.trim().length < 3) {
+      toast.error("Введите не менее 3 символов для поиска!");
       return;
     }
     onSearch(searchTerm);
@@ -20,16 +20,22 @@ const SearchBar: React.FC<ISearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <header className={styles.searchHeader}>
-      <form className={styles.searchForm} onSubmit={handleFormSubmit}>
+    <header className={styles.header}>
+      <form className={styles.form} onSubmit={handleFormSubmit}>
         <input
-          className={styles.searchInput}
+          className={styles.input}
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Поиск изображений и фото"
+          aria-label="Search images input"
         />
-        <button className={styles.searchButton} type="submit">
+        <button
+          className={styles.btn}
+          type="submit"
+          disabled={!searchTerm.trim()} 
+          aria-label="Search button"
+        >
           Найти
         </button>
       </form>

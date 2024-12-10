@@ -1,29 +1,37 @@
-.LoadMoreBtn {
-    position: relative;
-    display: inline-block;
-    padding: 10px 30px;
-    text-align: center;
-    font-size: 18px;
-    letter-spacing: 3px;
-    text-decoration: none;
-    color: #ffffff;
-    background-color: #696969;
-    cursor: pointer;
-    transition: all 0.3s ease-out;
-    border: 2px solid #696969;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  .LoadMoreBtn:hover {
-    color: #ffffff;
-    background-color: #555555;
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
-    transform: translateY(-2px);
-  }
-  
-  .LoadMoreBtn:active {
-    transform: translateY(2px) scale(0.95);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    background-color: #444444;
-  }
+.loadMoreButton {
+  position: relative;
+  display: inline-block;
+  padding: 12px 36px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-decoration: none;
+  color: #ffffff;
+  background-color: #696969;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+  border: 2px solid #696969;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.loadMoreButton:hover {
+  background-color: #555555;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.loadMoreButton:active {
+  transform: translateY(2px) scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: #444444;
+}
+
+.loadMoreButton:disabled {
+  background-color: #ccc;
+  color: #666;
+  border-color: #ccc;
+  cursor: not-allowed;
+  box-shadow: none;
+}

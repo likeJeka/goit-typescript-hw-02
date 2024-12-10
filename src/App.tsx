@@ -9,9 +9,8 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
 import ImageModal from "./components/ImageModal/ImageModal";
 
-const API_KEY = "O8xx4BoKhrynM_idIMcZNVlgm97d4XejwArnmPzdAZM";
-
-interface IImageBase {
+// Define the base interface for image data
+export interface IImageBase {
   id: string;
   urls: {
     small: string;
@@ -20,12 +19,20 @@ interface IImageBase {
   alt_description: string;
 }
 
-interface IImage extends IImageBase {
+// Extend the interface for more specific image properties
+export interface IImage extends IImageBase {
   user: {
     name: string;
   };
   likes: number;
+  description?: string; // Added optional description property
 }
+
+interface FetchResponse {
+  results: IImage[];
+}
+
+const API_KEY = "O8xx4BoKhrynM_idIMcZNVlgm97d4XejwArnmPzdAZM";
 
 const App: React.FC = () => {
   const [imageList, setImageList] = useState<IImage[]>([]);
@@ -34,13 +41,14 @@ const App: React.FC = () => {
   const [activeImage, setActiveImage] = useState<IImage | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [searchTerm, setSearchTerm] = useState<string>("");
+
   const galleryEndRef = useRef<HTMLDivElement | null>(null);
 
-  const fetchImages = async (query: string, page: number) => {
+  const fetchImages = async (query: string, page: number): Promise<IImage[]> => {
     setIsLoading(true);
     setErrorMsg(null);
     try {
-      const response = await axios.get(
+      const response = await axios.get<FetchResponse>(
         "https://api.unsplash.com/search/photos",
         {
           params: { query, page, per_page: 9 },
@@ -90,7 +98,7 @@ const App: React.FC = () => {
   return (
     <>
       <Toaster />
-      <SearchBar onSearch={handleSearch} /> {}
+      <SearchBar onSearch={handleSearch} />
       {errorMsg && <ErrorMessage message={errorMsg} />}
       {isLoading && <Loader />}
       <ImageGallery images={imageList} onImageClick={handleImageClick} />

@@ -1,43 +1,28 @@
-
 import ImageCard from "./ImageCard/ImageCard";
 import css from "./ImageGallery.module.css";
-
-type BaseImage = {
-  id: string;
-  urls: {
-    small: string;
-    regular: string;
-  };
-  alt_description: string;
-};
-
-type CustomImage = BaseImage & {
-  user: {
-    name: string;
-  };
-  likes: number;
-};
+import { IImage } from "../../App";
 
 type ImageGalleryProps = {
-  images: CustomImage[];
-  onImageClick: (image: CustomImage) => void;
+  images: IImage[];
+  onImageClick: (image: IImage) => void;
 };
 
-const ImageGallery = ({ images, onImageClick }: ImageGalleryProps) => {
-  if (!images.length) return null;
-
-  const handleImageClick = (image: CustomImage) => {
-    onImageClick(image);
-  };
-
-  const renderImages = () =>
-    images.map((image) => (
-      <li className={css.ImageCard} key={image.id}>
-        <ImageCard image={image} onClick={() => handleImageClick(image)} />
-      </li>
-    ));
-
-  return <ul className={css.ImageGallery}>{renderImages()}</ul>;
+const ImageGallery: React.FC<ImageGalleryProps> = ({ images, onImageClick }) => {
+  return (
+    <div className={css.galleryWrapper}>
+      {!images.length ? (
+        <p className={css.emptyMessage}>No images found. Try searching again.</p>
+      ) : (
+        <ul className={css.ImageGallery}>
+          {images.map((image) => (
+            <li className={css.ImageCard} key={image.id}>
+              <ImageCard image={image} onClick={() => onImageClick(image)} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 };
 
 export default ImageGallery;

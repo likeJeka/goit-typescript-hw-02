@@ -1,16 +1,8 @@
+import { IImageBase } from "../../../App";
 
-
-interface Image {
-  id: string;
-  urls: {
-    small: string;
-    regular: string;
-  };
-  alt_description: string;
-}
 
 interface ImageCardProps {
-  image: Image;
+  image: IImageBase;
   onClick: () => void;
 }
 

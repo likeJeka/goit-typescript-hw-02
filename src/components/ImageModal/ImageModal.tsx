@@ -1,24 +1,10 @@
-
 import Modal from "react-modal";
 import css from "./ImageModal.module.css";
-
-interface User {
-  name: string;
-}
-
-interface Image {
-  urls: {
-    regular: string;
-  };
-  alt_description: string;
-  description?: string;
-  user: User;
-  likes: number;
-}
+import { IImage } from "../../App";
 
 interface ImageModalProps {
   isOpen: boolean;
-  image: Image | null;
+  image: IImage | null;
   onClose: () => void;
 }
 
@@ -32,23 +18,25 @@ const ImageModal: React.FC<ImageModalProps> = ({ isOpen, image, onClose }) => {
       closeTimeoutMS={200}
     >
       <button className={css.closeButton} onClick={onClose}>
-        Close
+        &times; {/* Стандартный крестик */}
       </button>
       {image ? (
-        <>
+        <div>
           <img
             className={css.modalImg}
             src={image.urls.regular}
-            alt={image.alt_description}
+            alt={image.alt_description || "No description available"}
           />
           <h2 className={css.modalDescription}>
-            {image.description || "No description"}
+            {image.description || "No description available"}
           </h2>
-          <p>by {image.user.name}</p>
-          <p>Likes: {image.likes}</p>
-        </>
+          <p>
+            by {image.user.name || "Unknown author"}
+          </p>
+          <p>Likes: {image.likes || 0}</p>
+        </div>
       ) : (
-        <p>No image selected</p>
+        <p className={css.noImage}>No image selected</p>
       )}
     </Modal>
   );
